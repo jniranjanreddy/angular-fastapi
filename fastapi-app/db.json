@@ -1,20 +1,14 @@
 {
   "dev": {
     "DB_CONN": "mongodb://devops:password@192.168.232.163:27018",
-    "RX_KAFKA_HOST_URL": "",
+    "NR_KAFKA_HOST_URL": "",
     "PATIENT_PREPROCESSOR_KAFKA_TOPIC": "",
     "ENV_PREFIX_KAFKA_TOPIC": "dev"
   },
   "qa": {
     "DB_CONN": "mongodb://devops:password@192.168.232.163:27018",
-    "RX_KAFKA_HOST_URL": "",
+    "NR_KAFKA_HOST_URL": "",
     "PATIENT_PREPROCESSOR_KAFKA_TOPIC": "",
     "ENV_PREFIX_KAFKA_TOPIC": "qa"
-  },
-  "qaperf": {
-    "DB_CONN": "mongodb://devops:password@192.168.232.163:27018",
-    "RX_KAFKA_HOST_URL": "",
-    "PATIENT_PREPROCESSOR_KAFKA_TOPIC": "",
-    "ENV_PREFIX_KAFKA_TOPIC": "qaperf"
   }
 }
