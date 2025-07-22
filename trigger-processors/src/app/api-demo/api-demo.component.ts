@@ -13,7 +13,7 @@ import { ApiService, Level0Response, Level1Response, CleanupResponse } from '../
       
       <!-- Level 0 API -->
       <div class="api-section">
-        <h2>Level 0 API</h2>
+        <h2>Level 1 API</h2>
         <div class="input-group">
           <input 
             type="text" 
@@ -35,7 +35,7 @@ import { ApiService, Level0Response, Level1Response, CleanupResponse } from '../
 
       <!-- Level 1 API -->
       <div class="api-section">
-        <h2>Level 1 API</h2>
+        <h2>Level 3 API</h2>
         <div class="input-group">
           <input 
             type="text" 

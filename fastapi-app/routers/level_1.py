@@ -7,4 +7,4 @@ level1 = APIRouter()
 
 @level1.get("/level1")
 def get_level1(patient_ids_request: str):
-    return {"patient_ids": patient_ids_request}
+    return {"level": 3, "patient_ids": patient_ids_request}
