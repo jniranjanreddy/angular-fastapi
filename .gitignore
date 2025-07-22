@@ -19,7 +19,6 @@
 **/build
 **/vendor
 **/public
-!.venv
+venv/**
 **/tmp
 **/cache
-**/.venv
