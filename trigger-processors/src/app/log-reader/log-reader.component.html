@@ -1,0 +1,94 @@
+<div class="log-reader-container">
+  <h2>Log Reader</h2>
+  
+  <!-- Tab Navigation -->
+  <div class="tab-navigation">
+    <button 
+      class="tab-button" 
+      [class.active]="activeTab === 'l1'"
+      (click)="setActiveTab('l1')">
+      L1 Search
+    </button>
+    <button 
+      class="tab-button" 
+      [class.active]="activeTab === 'l2'"
+      (click)="setActiveTab('l2')">
+      L2 Search
+    </button>
+    <button 
+      class="tab-button" 
+      [class.active]="activeTab === 'l3'"
+      (click)="setActiveTab('l3')">
+      L3 Search
+    </button>
+  </div>
+
+  <!-- Tab Content -->
+  <div class="tab-content">
+    <!-- L1 Search Section -->
+    <div class="search-section" *ngIf="activeTab === 'l1'">
+      <h3>L1 Search</h3>
+      <div class="search-form">
+        <div class="input-group">
+          <label for="l1-patient-id">Patient ID:</label>
+          <input 
+            type="text" 
+            id="l1-patient-id"
+            [(ngModel)]="l1PatientId"
+            placeholder="Enter Patient ID"
+            class="search-input">
+        </div>
+        <button 
+          type="button" 
+          (click)="onL1Search()"
+          class="submit-button">
+          Submit
+        </button>
+      </div>
+    </div>
+
+    <!-- L2 Search Section -->
+    <div class="search-section" *ngIf="activeTab === 'l2'">
+      <h3>L2 Search</h3>
+      <div class="search-form">
+        <div class="input-group">
+          <label for="l2-patient-id">Patient ID:</label>
+          <input 
+            type="text" 
+            id="l2-patient-id"
+            [(ngModel)]="l2PatientId"
+            placeholder="Enter Patient ID"
+            class="search-input">
+        </div>
+        <button 
+          type="button" 
+          (click)="onL2Search()"
+          class="submit-button">
+          Submit
+        </button>
+      </div>
+    </div>
+
+    <!-- L3 Search Section -->
+    <div class="search-section" *ngIf="activeTab === 'l3'">
+      <h3>L3 Search</h3>
+      <div class="search-form">
+        <div class="input-group">
+          <label for="l3-patient-id">Patient ID:</label>
+          <input 
+            type="text" 
+            id="l3-patient-id"
+            [(ngModel)]="l3PatientId"
+            placeholder="Enter Patient ID"
+            class="search-input">
+        </div>
+        <button 
+          type="button" 
+          (click)="onL3Search()"
+          class="submit-button">
+          Submit
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
