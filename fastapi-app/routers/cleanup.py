@@ -1,15 +1,59 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
+from typing import List
+import os
+import sys
+
+# Add parent directory to path to access logs folder
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 
 cleanup = APIRouter()
 
-
+def read_cleanup_logs(patient_id: str = None) -> List[str]:
+    """Read cleanup.log file and optionally filter by patient ID"""
+    try:
+        log_file_path = os.path.join(os.path.dirname(__file__), '..', '..', 'logs', 'cleanup.log')
+        
+        if not os.path.exists(log_file_path):
+            return []
+        
+        with open(log_file_path, 'r', encoding='utf-8') as file:
+            lines = file.readlines()
+            # Remove trailing whitespace and empty lines
+            content = [line.strip() for line in lines if line.strip()]
+            
+            # Filter by patient ID if provided
+            if patient_id:
+                content = [line for line in content if patient_id in line]
+            
+            return content
+    except Exception as e:
+        print(f"Error reading cleanup.log: {str(e)}")
+        return []
 
 @cleanup.get("/cleanup")
 def get_cleanup(patient_ids_request: str):
     try:
         if patient_ids_request is None:
             raise Exception("No patient IDs provided")
-        return {"level": "cleanup", "status": 1, "message": "success", "result": patient_ids_request}
+        
+        # Read log data for the patient
+        log_data = read_cleanup_logs(patient_ids_request)
+        
+        return {
+            "level": "cleanup", 
+            "status": 1, 
+            "message": "success", 
+            "result": patient_ids_request,
+            "logs": log_data,
+            "log_count": len(log_data)
+        }
     except Exception as e:
-        return {"level": "cleanup", "status": 0, "message": "failed", "result": f"error occured: {str(e)}"}
+        return {
+            "level": "cleanup", 
+            "status": 0, 
+            "message": "failed", 
+            "result": f"error occured: {str(e)}",
+            "logs": [],
+            "log_count": 0
+        }

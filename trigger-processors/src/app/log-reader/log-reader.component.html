@@ -1,5 +1,5 @@
 <div class="log-reader-container">
-  <h2>Log Reader</h2>
+  <h2>TPR</h2>
   
   <!-- Tab Navigation -->
   <div class="tab-navigation">
@@ -63,6 +63,23 @@
             <p><strong>Level:</strong> {{ l1Response.level }}</p>
             <p><strong>Message:</strong> {{ l1Response.message }}</p>
             <p><strong>Result:</strong> {{ l1Response.result }}</p>
+            <p><strong>Log Count:</strong> {{ l1Response.log_count }} entries found</p>
+          </div>
+          
+          <!-- L1 Logs Display -->
+          <div class="logs-section" *ngIf="l1Response.logs && l1Response.logs.length > 0">
+            <h4>L1 Processing Logs for Patient {{ l1Response.result }}</h4>
+            <div class="log-content">
+              <div 
+                class="log-line" 
+                *ngFor="let logLine of l1Response.logs">
+                <span class="log-timestamp">{{ parseLogLine(logLine).timestamp }}</span>
+                <span class="log-level" [class]="'level-' + parseLogLine(logLine).level.toLowerCase()">
+                  [{{ parseLogLine(logLine).level }}]
+                </span>
+                <span class="log-message">{{ parseLogLine(logLine).message }}</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -106,6 +123,23 @@
             <p><strong>Level:</strong> {{ l3Response.level }}</p>
             <p><strong>Message:</strong> {{ l3Response.message }}</p>
             <p><strong>Result:</strong> {{ l3Response.result }}</p>
+            <p><strong>Log Count:</strong> {{ l3Response.log_count }} entries found</p>
+          </div>
+          
+          <!-- L3 Logs Display -->
+          <div class="logs-section" *ngIf="l3Response.logs && l3Response.logs.length > 0">
+            <h4>L3 Processing Logs for Patient {{ l3Response.result }}</h4>
+            <div class="log-content">
+              <div 
+                class="log-line" 
+                *ngFor="let logLine of l3Response.logs">
+                <span class="log-timestamp">{{ parseLogLine(logLine).timestamp }}</span>
+                <span class="log-level" [class]="'level-' + parseLogLine(logLine).level.toLowerCase()">
+                  [{{ parseLogLine(logLine).level }}]
+                </span>
+                <span class="log-message">{{ parseLogLine(logLine).message }}</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -149,6 +183,23 @@
             <p><strong>Level:</strong> {{ cleanupResponse.level }}</p>
             <p><strong>Message:</strong> {{ cleanupResponse.message }}</p>
             <p><strong>Result:</strong> {{ cleanupResponse.result }}</p>
+            <p><strong>Log Count:</strong> {{ cleanupResponse.log_count }} entries found</p>
+          </div>
+          
+          <!-- Cleanup Logs Display -->
+          <div class="logs-section" *ngIf="cleanupResponse.logs && cleanupResponse.logs.length > 0">
+            <h4>Cleanup Processing Logs for Patient {{ cleanupResponse.result }}</h4>
+            <div class="log-content">
+              <div 
+                class="log-line" 
+                *ngFor="let logLine of cleanupResponse.logs">
+                <span class="log-timestamp">{{ parseLogLine(logLine).timestamp }}</span>
+                <span class="log-level" [class]="'level-' + parseLogLine(logLine).level.toLowerCase()">
+                  [{{ parseLogLine(logLine).level }}]
+                </span>
+                <span class="log-message">{{ parseLogLine(logLine).message }}</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>

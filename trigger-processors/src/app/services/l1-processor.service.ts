@@ -8,6 +8,8 @@ export interface L1ProcessorResponse {
   status: number;
   message: string;
   result: string;
+  logs: string[];
+  log_count: number;
 }
 
 @Injectable({

@@ -197,10 +197,97 @@
   align-items: center;
 }
 
-.response-details strong {
-  color: #333;
-  font-weight: 600;
-}
+  .response-details strong {
+    color: #333;
+    font-weight: 600;
+  }
+
+  /* Logs Section Styles */
+  .logs-section {
+    margin-top: 20px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 6px;
+    border: 1px solid #e9ecef;
+  }
+
+  .logs-section h4 {
+    margin: 0 0 15px 0;
+    color: #333;
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+
+  .log-content {
+    max-height: 300px;
+    overflow-y: auto;
+    font-family: 'Courier New', monospace;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    background: white;
+    border-radius: 4px;
+    border: 1px solid #e9ecef;
+  }
+
+  .log-line {
+    padding: 4px 8px;
+    border-bottom: 1px solid #f1f3f4;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .log-line:hover {
+    background: #f8f9fa;
+  }
+
+  .log-timestamp {
+    color: #6c757d;
+    font-weight: 500;
+    min-width: 140px;
+    flex-shrink: 0;
+  }
+
+  .log-level {
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.8rem;
+    min-width: 60px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  .level-info {
+    background: #d1ecf1;
+    color: #0c5460;
+  }
+
+  .level-error {
+    background: #f8d7da;
+    color: #721c24;
+  }
+
+  .level-warning {
+    background: #fff3cd;
+    color: #856404;
+  }
+
+  .level-debug {
+    background: #e2e3e5;
+    color: #383d41;
+  }
+
+  .level-unknown {
+    background: #f8f9fa;
+    color: #6c757d;
+  }
+
+  .log-message {
+    color: #333;
+    flex: 1;
+    word-break: break-word;
+  }
 
 /* Responsive Design */
 @media (max-width: 768px) {
@@ -238,5 +325,14 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 5px;
+  }
+  
+  .log-line {
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .log-timestamp {
+    min-width: auto;
   }
 }

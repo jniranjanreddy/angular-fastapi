@@ -27,6 +27,34 @@ export class LogReaderComponent {
   l3Response: L3ProcessorResponse | null = null;
   cleanupResponse: CleanupProcessorResponse | null = null;
 
+  // Log parsing helper
+  parseLogLine(logLine: string): { timestamp: string; level: string; message: string } {
+    try {
+      // Expected format: "2024-01-15 08:30:15 [INFO] L1 Processor started..."
+      const match = logLine.match(/^(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}) \[(\w+)\] (.+)$/);
+      
+      if (match) {
+        return {
+          timestamp: match[1],
+          level: match[2],
+          message: match[3]
+        };
+      } else {
+        return {
+          timestamp: '',
+          level: 'UNKNOWN',
+          message: logLine
+        };
+      }
+    } catch (error) {
+      return {
+        timestamp: '',
+        level: 'ERROR',
+        message: logLine
+      };
+    }
+  }
+
   // Loading states
   l1Loading: boolean = false;
   l3Loading: boolean = false;

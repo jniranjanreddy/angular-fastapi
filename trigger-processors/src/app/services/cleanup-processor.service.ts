@@ -8,6 +8,8 @@ export interface CleanupProcessorResponse {
   status: number;
   message: string;
   result: string;
+  logs: string[];
+  log_count: number;
 }
 
 @Injectable({
