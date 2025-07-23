@@ -1,111 +1,116 @@
-# Trigger Processors - Multi-Framework App
+# Angular FastAPI Integration
 
-This project consists of a FastAPI backend and an Angular frontend with integrated API services.
-
-## Project Structure
-
-- `fastapi-app/` - FastAPI backend server
-- `trigger-processors/` - Angular frontend application
-
-## Backend (FastAPI)
-
-### Setup and Run
-
-1. Navigate to the backend directory:
-   ```bash
-   cd fastapi-app
-   ```
-
-2. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. Run the FastAPI server:
-   ```bash
-   python main.py
-   ```
-
-The backend will be available at `http://localhost:8001`
-
-### API Endpoints
-
-- **Level 0**: `GET /level0/level0?patient_ids_request={ids}` (optional parameter)
-- **Level 1**: `GET /level1/level1?patient_ids_request={ids}` (required parameter)
-- **Cleanup**: `GET /cleanup/cleanup?patient_ids_request={ids}` (required parameter)
-
-## Frontend (Angular)
-
-### Setup and Run
-
-1. Navigate to the frontend directory:
-   ```bash
-   cd trigger-processors
-   ```
-
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-
-3. Run the Angular development server:
-   ```bash
-   npm start
-   ```
-
-The frontend will be available at `http://localhost:4200`
+This project integrates an Angular frontend with a FastAPI backend for processing patient data through different levels of processors.
 
 ## Features
 
-### API Integration
+- **L1 Processor**: Processes patient IDs through Level 1 processing
+- **L3 Processor**: Processes patient IDs through Level 3 processing  
+- **Cleanup Processor**: Handles cleanup operations for patient data
+- **Real-time Response Display**: Shows processing results with success/error status
+- **Loading States**: Visual feedback during API calls
+- **Error Handling**: Comprehensive error handling and user feedback
 
-The Angular application includes:
+## Backend Integration
 
-- **Environment Configuration**: Separate configs for development and production
-- **API Service**: Centralized service for all backend API calls
-- **Demo Component**: Interactive UI to test all three API endpoints
-- **Error Handling**: Comprehensive error handling for API calls
-- **TypeScript Interfaces**: Strongly typed API responses
+The frontend is integrated with the following FastAPI endpoints:
 
-### Components
+- `GET /level1/level1` - L1 Processor endpoint
+- `GET /level3/level3` - L3 Processor endpoint  
+- `GET /cleanup/cleanup` - Cleanup Processor endpoint
 
-- **ApiDemoComponent**: Demonstrates all three API endpoints with input forms and response display
-- **LogReaderComponent**: Original log reader functionality
+All endpoints accept a `patient_ids_request` query parameter.
 
-## API Service Features
+## Project Structure
 
-- **Level 0 API**: Optional patient IDs parameter
-- **Level 1 API**: Required patient IDs parameter  
-- **Cleanup API**: Required patient IDs parameter
-- **Connection Testing**: Built-in backend connectivity test
-- **Error Handling**: User-friendly error messages
-- **Response Display**: JSON formatted response display
+```
+src/app/
+├── services/
+│   ├── api.service.ts              # Main API service with processor integrations
+│   ├── l1-processor.service.ts     # L1 processor service
+│   ├── l3-processor.service.ts     # L3 processor service
+│   └── cleanup-processor.service.ts # Cleanup processor service
+└── log-reader/
+    ├── log-reader.component.ts     # Main component with processor logic
+    ├── log-reader.component.html   # UI template
+    └── log-reader.component.css    # Styling
+```
+
+## Setup Instructions
+
+1. **Start the FastAPI Backend**:
+   ```bash
+   cd fastapi-app
+   pip install -r requirements.txt
+   python main.py
+   ```
+   The backend will run on `http://localhost:8001`
+
+2. **Start the Angular Frontend**:
+   ```bash
+   cd trigger-processors
+   npm install
+   ng serve
+   ```
+   The frontend will run on `http://localhost:4200`
+
+## Usage
+
+1. Open the application in your browser at `http://localhost:4200`
+2. Navigate between the three processor tabs:
+   - **L1 Processor**: For Level 1 processing
+   - **L3 Processor**: For Level 3 processing
+   - **Cleanup**: For cleanup operations
+3. Enter a Patient ID in the input field
+4. Click "Submit" to process the request
+5. View the response with status indicators and detailed information
+
+## API Response Format
+
+All processors return responses in the following format:
+
+```json
+{
+  "level": number|string,
+  "status": number,  // 1 for success, 0 for failure
+  "message": string,
+  "result": string
+}
+```
+
+## Error Handling
+
+The application handles various error scenarios:
+- Network connectivity issues
+- Invalid patient ID input
+- Backend service errors
+- CORS issues
+
+All errors are displayed to the user with clear messaging.
 
 ## Development
 
-### Backend Development
+### Adding New Processors
 
-The FastAPI backend includes CORS middleware configured for `http://localhost:4200` to allow frontend communication.
+1. Create a new service file in `src/app/services/`
+2. Define the response interface
+3. Implement the processing method
+4. Add the service to the main `ApiService`
+5. Update the component to use the new processor
 
-### Frontend Development
+### Environment Configuration
 
-The Angular app uses:
-- Standalone components
-- HttpClient for API communication
-- Reactive forms for user input
-- Modern CSS styling
+The API URL is configured in `src/environments/environment.ts`:
+```typescript
+export const environment = {
+  production: false,
+  apiUrl: 'http://localhost:8001'
+};
+```
 
-## Testing the Integration
+## Technologies Used
 
-1. Start the FastAPI backend first
-2. Start the Angular frontend
-3. Navigate to the API Demo section
-4. Test each endpoint with different patient IDs
-5. Use the "Test Connection" button to verify backend connectivity
-
-## Environment Configuration
-
-- **Development**: `src/environments/environment.ts`
-- **Production**: `src/environments/environment.prod.ts`
-
-Update the `apiUrl` in these files to match your backend URL.
+- **Frontend**: Angular 17, TypeScript, CSS3
+- **Backend**: FastAPI, Python
+- **HTTP Client**: Angular HttpClient
+- **Styling**: Custom CSS with responsive design

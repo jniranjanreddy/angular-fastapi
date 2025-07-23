@@ -7,19 +7,19 @@
       class="tab-button" 
       [class.active]="activeTab === 'l1'"
       (click)="setActiveTab('l1')">
-      L1 Search
-    </button>
-    <button 
-      class="tab-button" 
-      [class.active]="activeTab === 'l2'"
-      (click)="setActiveTab('l2')">
-      L2 Search
+      L1 Processor
     </button>
     <button 
       class="tab-button" 
       [class.active]="activeTab === 'l3'"
       (click)="setActiveTab('l3')">
-      L3 Search
+      L3 Processor
+    </button>
+    <button 
+      class="tab-button" 
+      [class.active]="activeTab === 'cleanup'"
+      (click)="setActiveTab('cleanup')">
+      Cleanup
     </button>
   </div>
 
@@ -27,7 +27,7 @@
   <div class="tab-content">
     <!-- L1 Search Section -->
     <div class="search-section" *ngIf="activeTab === 'l1'">
-      <h3>L1 Search</h3>
+      <h3>L1 Processor</h3>
       <div class="search-form">
         <div class="input-group">
           <label for="l1-patient-id">Patient ID:</label>
@@ -41,37 +41,36 @@
         <button 
           type="button" 
           (click)="onL1Search()"
+          [disabled]="l1Loading"
           class="submit-button">
-          Submit
+          {{ l1Loading ? 'Processing...' : 'Submit' }}
         </button>
       </div>
-    </div>
 
-    <!-- L2 Search Section -->
-    <div class="search-section" *ngIf="activeTab === 'l2'">
-      <h3>L2 Search</h3>
-      <div class="search-form">
-        <div class="input-group">
-          <label for="l2-patient-id">Patient ID:</label>
-          <input 
-            type="text" 
-            id="l2-patient-id"
-            [(ngModel)]="l2PatientId"
-            placeholder="Enter Patient ID"
-            class="search-input">
+      <!-- L1 Response Display -->
+      <div class="response-section" *ngIf="l1Response || l1Error">
+        <div class="error-message" *ngIf="l1Error">
+          <strong>Error:</strong> {{ l1Error }}
         </div>
-        <button 
-          type="button" 
-          (click)="onL2Search()"
-          class="submit-button">
-          Submit
-        </button>
+        <div class="response-message" *ngIf="l1Response">
+          <div class="response-header">
+            <strong>Response:</strong>
+            <span class="status-badge" [class.success]="isSuccess(l1Response)" [class.error]="!isSuccess(l1Response)">
+              {{ isSuccess(l1Response) ? 'Success' : 'Failed' }}
+            </span>
+          </div>
+          <div class="response-details">
+            <p><strong>Level:</strong> {{ l1Response.level }}</p>
+            <p><strong>Message:</strong> {{ l1Response.message }}</p>
+            <p><strong>Result:</strong> {{ l1Response.result }}</p>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- L3 Search Section -->
+    <!-- L3 Processor Section -->
     <div class="search-section" *ngIf="activeTab === 'l3'">
-      <h3>L3 Search</h3>
+      <h3>L3 Processor</h3>
       <div class="search-form">
         <div class="input-group">
           <label for="l3-patient-id">Patient ID:</label>
@@ -85,9 +84,73 @@
         <button 
           type="button" 
           (click)="onL3Search()"
+          [disabled]="l3Loading"
           class="submit-button">
-          Submit
+          {{ l3Loading ? 'Processing...' : 'Submit' }}
         </button>
+      </div>
+
+      <!-- L3 Response Display -->
+      <div class="response-section" *ngIf="l3Response || l3Error">
+        <div class="error-message" *ngIf="l3Error">
+          <strong>Error:</strong> {{ l3Error }}
+        </div>
+        <div class="response-message" *ngIf="l3Response">
+          <div class="response-header">
+            <strong>Response:</strong>
+            <span class="status-badge" [class.success]="isSuccess(l3Response)" [class.error]="!isSuccess(l3Response)">
+              {{ isSuccess(l3Response) ? 'Success' : 'Failed' }}
+            </span>
+          </div>
+          <div class="response-details">
+            <p><strong>Level:</strong> {{ l3Response.level }}</p>
+            <p><strong>Message:</strong> {{ l3Response.message }}</p>
+            <p><strong>Result:</strong> {{ l3Response.result }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cleanup Section -->
+    <div class="search-section" *ngIf="activeTab === 'cleanup'">
+      <h3>Cleanup</h3>
+      <div class="search-form">
+        <div class="input-group">
+          <label for="cleanup-patient-id">Patient ID:</label>
+          <input 
+            type="text" 
+            id="cleanup-patient-id"
+            [(ngModel)]="cleanupPatientId"
+            placeholder="Enter Patient ID"
+            class="search-input">
+        </div>
+        <button 
+          type="button" 
+          (click)="onCleanupSearch()"
+          [disabled]="cleanupLoading"
+          class="submit-button">
+          {{ cleanupLoading ? 'Processing...' : 'Submit' }}
+        </button>
+      </div>
+
+      <!-- Cleanup Response Display -->
+      <div class="response-section" *ngIf="cleanupResponse || cleanupError">
+        <div class="error-message" *ngIf="cleanupError">
+          <strong>Error:</strong> {{ cleanupError }}
+        </div>
+        <div class="response-message" *ngIf="cleanupResponse">
+          <div class="response-header">
+            <strong>Response:</strong>
+            <span class="status-badge" [class.success]="isSuccess(cleanupResponse)" [class.error]="!isSuccess(cleanupResponse)">
+              {{ isSuccess(cleanupResponse) ? 'Success' : 'Failed' }}
+            </span>
+          </div>
+          <div class="response-details">
+            <p><strong>Level:</strong> {{ cleanupResponse.level }}</p>
+            <p><strong>Message:</strong> {{ cleanupResponse.message }}</p>
+            <p><strong>Result:</strong> {{ cleanupResponse.result }}</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>

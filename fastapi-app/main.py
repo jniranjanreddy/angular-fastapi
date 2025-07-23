@@ -9,8 +9,8 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from fastapi import FastAPI, HTTPException
 # from utils import load_patient_ids
-from routers.level_0 import level0
 from routers.level_1 import level1
+from routers.level_3 import level3
 from routers.cleanup import cleanup
 
 
@@ -24,8 +24,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(level0, tags=["level0"], prefix="/level0")
-app.include_router(level1, tags=["level1"], prefix="/level1")
+app.include_router(level1, tags=["level0"], prefix="/level1")
+app.include_router(level3, tags=["level1"], prefix="/level3")
 app.include_router(cleanup, tags=["cleanup"], prefix="/cleanup")
 
 
