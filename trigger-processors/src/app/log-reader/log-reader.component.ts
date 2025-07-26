@@ -78,7 +78,7 @@ export class LogReaderComponent {
     this.l1Error = null;
     this.l1Response = null;
 
-    this.apiService.processL1(this.l1PatientId).subscribe({
+    this.apiService.processL1Single(this.l1PatientId).subscribe({
       next: (response) => {
         this.l1Response = response;
         this.l1Loading = false;

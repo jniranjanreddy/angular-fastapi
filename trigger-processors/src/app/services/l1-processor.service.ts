@@ -8,8 +8,11 @@ export interface L1ProcessorResponse {
   status: number;
   message: string;
   result: string;
-  logs: string[];
-  log_count: number;
+  patient_ids: string[];
+}
+
+export interface PatientIDsRequest {
+  patient_ids: string[];
 }
 
 @Injectable({
@@ -22,24 +25,35 @@ export class L1ProcessorService {
 
   /**
    * Process patient IDs through L1 processor
-   * @param patientIds - Patient IDs to process
+   * @param patientIds - Array of patient IDs to process
    * @returns Observable with L1 processor response
    */
-  processL1(patientIds: string): Observable<L1ProcessorResponse> {
-    const params = new HttpParams().set('patient_ids_request', patientIds);
-    return this.http.get<L1ProcessorResponse>(`${this.baseUrl}/level1/level1`, { params });
+  processL1(patientIds: string[]): Observable<L1ProcessorResponse> {
+    const requestBody: PatientIDsRequest = {
+      patient_ids: patientIds
+    };
+    return this.http.post<L1ProcessorResponse>(`${this.baseUrl}/level1/level1`, requestBody);
   }
 
   /**
-   * Process patient IDs through L1 processor with optional parameter
+   * Process a single patient ID through L1 processor
+   * @param patientId - Single patient ID to process
+   * @returns Observable with L1 processor response
+   */
+  processL1Single(patientId: string): Observable<L1ProcessorResponse> {
+    return this.processL1([patientId]);
+  }
+
+  /**
+   * Process patient IDs through L1 processor with optional parameter (legacy method)
    * @param patientIds - Optional patient IDs to process
    * @returns Observable with L1 processor response
    */
   processL1Optional(patientIds?: string): Observable<L1ProcessorResponse> {
-    let params = new HttpParams();
     if (patientIds) {
-      params = params.set('patient_ids_request', patientIds);
+      return this.processL1([patientIds]);
+    } else {
+      return this.processL1([]);
     }
-    return this.http.get<L1ProcessorResponse>(`${this.baseUrl}/level1/level1`, { params });
   }
 } 

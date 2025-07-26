@@ -60,9 +60,14 @@ export class ApiService {
     return this.http.get<CleanupResponse>(`${this.baseUrl}/cleanup/cleanup`, { params });
   }
 
-  // L1 Processor Integration
-  processL1(patientIds: string): Observable<L1ProcessorResponse> {
+  // L1 Processor Integration - Updated to use array of patient IDs
+  processL1(patientIds: string[]): Observable<L1ProcessorResponse> {
     return this.l1Processor.processL1(patientIds);
+  }
+
+  // L1 Processor Integration - Single patient ID
+  processL1Single(patientId: string): Observable<L1ProcessorResponse> {
+    return this.l1Processor.processL1Single(patientId);
   }
 
   processL1Optional(patientIds?: string): Observable<L1ProcessorResponse> {

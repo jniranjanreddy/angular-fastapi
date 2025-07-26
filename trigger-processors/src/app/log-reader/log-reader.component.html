@@ -63,23 +63,7 @@
             <p><strong>Level:</strong> {{ l1Response.level }}</p>
             <p><strong>Message:</strong> {{ l1Response.message }}</p>
             <p><strong>Result:</strong> {{ l1Response.result }}</p>
-            <p><strong>Log Count:</strong> {{ l1Response.log_count }} entries found</p>
-          </div>
-          
-          <!-- L1 Logs Display -->
-          <div class="logs-section" *ngIf="l1Response.logs && l1Response.logs.length > 0">
-            <h4>L1 Processing Logs for Patient {{ l1Response.result }}</h4>
-            <div class="log-content">
-              <div 
-                class="log-line" 
-                *ngFor="let logLine of l1Response.logs">
-                <span class="log-timestamp">{{ parseLogLine(logLine).timestamp }}</span>
-                <span class="log-level" [class]="'level-' + parseLogLine(logLine).level.toLowerCase()">
-                  [{{ parseLogLine(logLine).level }}]
-                </span>
-                <span class="log-message">{{ parseLogLine(logLine).message }}</span>
-              </div>
-            </div>
+            <p><strong>Patient IDs:</strong> {{ l1Response.patient_ids?.join(', ') || 'None' }}</p>
           </div>
         </div>
       </div>
