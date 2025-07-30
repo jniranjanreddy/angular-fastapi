@@ -10,6 +10,8 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '.
 # Import the trigger_l1 functions
 from diagnostics.execution_scripts.trigger_l1 import set_patient_ids, execute_l1_diagnostics
 
+
+
 level1 = APIRouter()
 
 class PatientIDsRequest(BaseModel):
@@ -66,7 +68,6 @@ def read_level1_logs(patient_id: str = None) -> List[str]:
 #         }
 
 @level1.post("/level1")
-
 def trigger_l1_diagnostics(request: PatientIDsRequest):
     """Trigger L1 diagnostics for the provided patient IDs"""
     try:
@@ -80,11 +81,16 @@ def trigger_l1_diagnostics(request: PatientIDsRequest):
                 raise HTTPException(status_code=400, detail=f"Invalid patient ID: {patient_id}")
         
         # Set the patient IDs in the global variable
+        print(f"patient_ids set-1:-----------------------\n {request.patient_ids}") ##########################
         set_patient_ids(request.patient_ids)
         print(f"patient_ids set: {request.patient_ids}")
+        print(f"patient_ids set-2:-----------------------------\n {request.patient_ids}") ##########################
         
         # Execute L1 diagnostics
         success = execute_l1_diagnostics()
+        
+        # Get log files for the patient IDs
+        log_files = get_log_files_for_patients(request.patient_ids)
         
         if success:
             return {
@@ -92,7 +98,8 @@ def trigger_l1_diagnostics(request: PatientIDsRequest):
                 "status": 1,
                 "message": "L1 diagnostics triggered successfully",
                 "result": f"Processed {len(request.patient_ids)} patient(s)",
-                "patient_ids": request.patient_ids
+                "patient_ids": request.patient_ids,
+                "log_files": log_files
             }
         else:
             return {
@@ -100,7 +107,8 @@ def trigger_l1_diagnostics(request: PatientIDsRequest):
                 "status": 0,
                 "message": "L1 diagnostics failed",
                 "result": "No patient IDs provided",
-                "patient_ids": []
+                "patient_ids": [],
+                "log_files": log_files
             }
             
     except Exception as e:
@@ -112,6 +120,76 @@ def trigger_l1_diagnostics(request: PatientIDsRequest):
             "status": 0,
             "message": "failed",
             "result": f"error occurred: {str(e)}",
-            "patient_ids": []
+            "patient_ids": [],
+            "log_files": []
         }
+
+def get_log_files_for_patients(patient_ids: List[str]) -> List[dict]:
+    """Get all log files for the given patient IDs from L1-run-logs/logs/"""
+    log_files = []
+    
+    try:
+        # Path to L1-run-logs/logs directory
+        logs_base_path = os.path.join(os.path.dirname(__file__), '..', 'L1-run-logs', 'logs')
+        
+        if not os.path.exists(logs_base_path):
+            print(f"Logs directory not found: {logs_base_path}")
+            return log_files
+        
+        # Iterate through all date directories
+        for date_dir in os.listdir(logs_base_path):
+            date_path = os.path.join(logs_base_path, date_dir)
+            
+            if os.path.isdir(date_path):
+                # Look for log files containing any of the patient IDs
+                for filename in os.listdir(date_path):
+                    if filename.endswith('.log'):
+                        # Check if any patient ID is in the filename
+                        for patient_id in patient_ids:
+                            if patient_id in filename:
+                                file_path = os.path.join(date_path, filename)
+                                file_size = os.path.getsize(file_path)
+                                
+                                log_files.append({
+                                    "filename": filename,
+                                    "date": date_dir,
+                                    "patient_id": patient_id,
+                                    "file_path": file_path,
+                                    "file_size": file_size,
+                                    "full_path": os.path.join(date_dir, filename)
+                                })
+                                break  # Found this patient ID, move to next file
+        
+        # Sort by date (newest first) and then by filename
+        log_files.sort(key=lambda x: (x["date"], x["filename"]), reverse=True)
+        
+    except Exception as e:
+        print(f"Error getting log files: {str(e)}")
+    
+    return log_files
+
+@level1.get("/log-file/{date}/{filename}")
+def read_log_file(date: str, filename: str):
+    """Read the content of a specific log file"""
+    try:
+        # Construct the file path
+        file_path = os.path.join(os.path.dirname(__file__), '..', 'L1-run-logs', 'logs', date, filename)
+        
+        if not os.path.exists(file_path):
+            raise HTTPException(status_code=404, detail="Log file not found")
+        
+        # Read the file content
+        with open(file_path, 'r', encoding='utf-8') as file:
+            content = file.read()
+        
+        return {
+            "filename": filename,
+            "date": date,
+            "content": content,
+            "file_size": os.path.getsize(file_path)
+        }
+        
+    except Exception as e:
+        print(f"Error reading log file: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error reading log file: {str(e)}")
 

@@ -83,4 +83,9 @@ export class ApiService {
   processCleanup(patientIds: string): Observable<CleanupProcessorResponse> {
     return this.cleanupProcessor.processCleanup(patientIds);
   }
+
+  // Log File Reading
+  readLogFile(date: string, filename: string): Observable<{filename: string; date: string; content: string; file_size: number}> {
+    return this.l1Processor.readLogFile(date, filename);
+  }
 } 

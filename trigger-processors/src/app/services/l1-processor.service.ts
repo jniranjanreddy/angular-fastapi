@@ -3,12 +3,22 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 
+export interface LogFile {
+  filename: string;
+  date: string;
+  patient_id: string;
+  file_path: string;
+  file_size: number;
+  full_path: string;
+}
+
 export interface L1ProcessorResponse {
   level: number;
   status: number;
   message: string;
   result: string;
   patient_ids: string[];
+  log_files: LogFile[];
 }
 
 export interface PatientIDsRequest {
@@ -55,5 +65,15 @@ export class L1ProcessorService {
     } else {
       return this.processL1([]);
     }
+  }
+
+  /**
+   * Read the content of a specific log file
+   * @param date - Date directory
+   * @param filename - Log file name
+   * @returns Observable with log file content
+   */
+  readLogFile(date: string, filename: string): Observable<{filename: string; date: string; content: string; file_size: number}> {
+    return this.http.get<{filename: string; date: string; content: string; file_size: number}>(`${this.baseUrl}/level1/log-file/${date}/${filename}`);
   }
 } 

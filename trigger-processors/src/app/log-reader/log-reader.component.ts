@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ApiService } from '../services/api.service';
-import { L1ProcessorResponse } from '../services/l1-processor.service';
+import { L1ProcessorResponse, LogFile } from '../services/l1-processor.service';
 import { L3ProcessorResponse } from '../services/l3-processor.service';
 import { CleanupProcessorResponse } from '../services/cleanup-processor.service';
 
@@ -26,6 +26,10 @@ export class LogReaderComponent {
   l1Response: L1ProcessorResponse | null = null;
   l3Response: L3ProcessorResponse | null = null;
   cleanupResponse: CleanupProcessorResponse | null = null;
+
+  // File viewer properties
+  selectedFile: LogFile | null = null;
+  fileContent: string | null = null;
 
   // Log parsing helper
   parseLogLine(logLine: string): { timestamp: string; level: string; message: string } {
@@ -78,7 +82,13 @@ export class LogReaderComponent {
     this.l1Error = null;
     this.l1Response = null;
 
-    this.apiService.processL1Single(this.l1PatientId).subscribe({
+    // Split the input by commas and trim whitespace from each ID
+    const patientIds = this.l1PatientId
+      .split(',')
+      .map(id => id.trim())
+      .filter(id => id.length > 0);
+
+    this.apiService.processL1(patientIds).subscribe({
       next: (response) => {
         this.l1Response = response;
         this.l1Loading = false;
@@ -103,7 +113,15 @@ export class LogReaderComponent {
     this.l3Error = null;
     this.l3Response = null;
 
-    this.apiService.processL3(this.l3PatientId).subscribe({
+    // Split the input by commas and trim whitespace from each ID
+    const patientIds = this.l3PatientId
+      .split(',')
+      .map(id => id.trim())
+      .filter(id => id.length > 0);
+
+    // For L3, we'll process the first patient ID (assuming single patient processing)
+    const firstPatientId = patientIds[0];
+    this.apiService.processL3(firstPatientId).subscribe({
       next: (response) => {
         this.l3Response = response;
         this.l3Loading = false;
@@ -128,7 +146,15 @@ export class LogReaderComponent {
     this.cleanupError = null;
     this.cleanupResponse = null;
 
-    this.apiService.processCleanup(this.cleanupPatientId).subscribe({
+    // Split the input by commas and trim whitespace from each ID
+    const patientIds = this.cleanupPatientId
+      .split(',')
+      .map(id => id.trim())
+      .filter(id => id.length > 0);
+
+    // For Cleanup, we'll process the first patient ID (assuming single patient processing)
+    const firstPatientId = patientIds[0];
+    this.apiService.processCleanup(firstPatientId).subscribe({
       next: (response) => {
         this.cleanupResponse = response;
         this.cleanupLoading = false;
@@ -150,5 +176,36 @@ export class LogReaderComponent {
   // Helper method to check if response is successful
   isSuccess(response: any): boolean {
     return response && response.status === 1;
+  }
+
+  // File viewer methods
+  selectFile(file: LogFile): void {
+    this.selectedFile = file;
+    this.loadFileContent(file);
+  }
+
+  closeFile(): void {
+    this.selectedFile = null;
+    this.fileContent = null;
+  }
+
+  loadFileContent(file: LogFile): void {
+    this.apiService.readLogFile(file.date, file.filename).subscribe({
+      next: (response) => {
+        this.fileContent = response.content;
+      },
+      error: (error) => {
+        console.error('Error loading file content:', error);
+        this.fileContent = 'Error loading file content';
+      }
+    });
+  }
+
+  formatFileSize(bytes: number): string {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   }
 }
