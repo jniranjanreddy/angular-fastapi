@@ -12,6 +12,7 @@ from fastapi import FastAPI, HTTPException
 from routers.level_1 import level1
 from routers.level_3 import level3
 from routers.cleanup import cleanup
+from routers.appointments_search import router as appointments_router
 
 
 app = FastAPI()
@@ -27,6 +28,7 @@ app.add_middleware(
 app.include_router(level1, tags=["level0"], prefix="/level1")
 app.include_router(level3, tags=["level1"], prefix="/level3")
 app.include_router(cleanup, tags=["cleanup"], prefix="/cleanup")
+app.include_router(appointments_router, tags=["appointments"], prefix="/api")
 
 
 
