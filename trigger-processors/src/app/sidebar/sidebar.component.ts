@@ -82,9 +82,10 @@ export class SidebarComponent implements OnInit {
       'stage': 'Staging',
       'sup': 'Support',
       'prod': 'Production',
-      'US': 'US Environment'
+      'US': 'US Environment',
+      'IND': 'India Environment'
     };
-    return displayNames[key] || key.toUpperCase();
+    return displayNames[key] || `${key.toUpperCase()} Environment`;
   }
 
   getEnvironmentIcon(key: string): string {
@@ -94,7 +95,9 @@ export class SidebarComponent implements OnInit {
       'qaperf': '⚡',
       'stage': '🎭',
       'sup': '🛡️',
-      'prod': '🚀'
+      'prod': '🚀',
+      'US': '🇺🇸',
+      'IND': '🇮🇳'
     };
     return icons[key] || '🌐';
   }
