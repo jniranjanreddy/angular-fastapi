@@ -2,8 +2,8 @@
   <h2>TPR</h2>
   
   <div class="main-layout">
-    <!-- Left Panel - Controls -->
-    <div class="left-panel">
+    <!-- Main Content -->
+    <div class="main-panel">
       <!-- Tab Navigation -->
       <div class="tab-navigation">
         <button 
@@ -67,7 +67,7 @@
             <p><strong>Level:</strong> {{ l1Response.level }}</p>
             <p><strong>Message:</strong> {{ l1Response.message }}</p>
             <p><strong>Result:</strong> {{ l1Response.result }}</p>
-            <p><strong>Patient IDs:</strong> {{ l1Response.patient_ids?.join(', ') || 'None' }}</p>
+            <p><strong>Patient IDs:</strong> {{ l1Response.patient_ids.join(', ') || 'None' }}</p>
           </div>
         </div>
       </div>
@@ -190,45 +190,6 @@
                 <span class="log-message">{{ parseLogLine(logLine).message }}</span>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Right Panel - File Viewer -->
-    <div class="right-panel">
-      <div class="file-viewer">
-        <h3>Log Files</h3>
-        
-        <!-- File List -->
-        <div class="file-list" *ngIf="l1Response?.log_files && l1Response.log_files.length > 0">
-          <div class="file-item" 
-               *ngFor="let file of l1Response.log_files"
-               [class.selected]="selectedFile === file"
-               (click)="selectFile(file)">
-            <div class="file-info">
-              <div class="file-name">{{ file.filename }}</div>
-              <div class="file-details">
-                <span class="file-date">{{ file.date }}</span>
-                <span class="file-size">{{ formatFileSize(file.file_size) }}</span>
-                <span class="patient-id">{{ file.patient_id }}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <div class="no-files" *ngIf="!l1Response?.log_files || l1Response.log_files.length === 0">
-          <p>No log files found for the selected patient IDs.</p>
-        </div>
-
-        <!-- File Content -->
-        <div class="file-content" *ngIf="selectedFile && fileContent">
-          <div class="file-header">
-            <h4>{{ selectedFile.filename }}</h4>
-            <button class="close-button" (click)="closeFile()">×</button>
-          </div>
-          <div class="content-viewer">
-            <pre>{{ fileContent }}</pre>
           </div>
         </div>
       </div>

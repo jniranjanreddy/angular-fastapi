@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ApiService } from '../services/api.service';
-import { L1ProcessorResponse, LogFile } from '../services/l1-processor.service';
+import { L1ProcessorResponse } from '../services/l1-processor.service';
 import { L3ProcessorResponse } from '../services/l3-processor.service';
 import { CleanupProcessorResponse } from '../services/cleanup-processor.service';
 
@@ -27,9 +27,6 @@ export class LogReaderComponent {
   l3Response: L3ProcessorResponse | null = null;
   cleanupResponse: CleanupProcessorResponse | null = null;
 
-  // File viewer properties
-  selectedFile: LogFile | null = null;
-  fileContent: string | null = null;
 
   // Log parsing helper
   parseLogLine(logLine: string): { timestamp: string; level: string; message: string } {
@@ -178,34 +175,4 @@ export class LogReaderComponent {
     return response && response.status === 1;
   }
 
-  // File viewer methods
-  selectFile(file: LogFile): void {
-    this.selectedFile = file;
-    this.loadFileContent(file);
-  }
-
-  closeFile(): void {
-    this.selectedFile = null;
-    this.fileContent = null;
-  }
-
-  loadFileContent(file: LogFile): void {
-    this.apiService.readLogFile(file.date, file.filename).subscribe({
-      next: (response) => {
-        this.fileContent = response.content;
-      },
-      error: (error) => {
-        console.error('Error loading file content:', error);
-        this.fileContent = 'Error loading file content';
-      }
-    });
-  }
-
-  formatFileSize(bytes: number): string {
-    if (bytes === 0) return '0 Bytes';
-    const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-  }
 }

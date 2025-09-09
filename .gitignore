@@ -23,3 +23,5 @@ venv/**
 **/tmp
 **/cache
 fastapi-app/diagnostics/
+**/*.pyc
+fastapi-app/routers/__pycache__/*
