@@ -1,109 +1,99 @@
 <div class="sidebar" [class.collapsed]="isCollapsed">
   <!-- Sidebar Header -->
   <div class="sidebar-header">
-    <div class="logo-section" *ngIf="!isCollapsed">
-      <h3>TPR Dashboard</h3>
-    </div>
     <button class="toggle-btn" (click)="toggleSidebar()">
       <span *ngIf="!isCollapsed">←</span>
       <span *ngIf="isCollapsed">→</span>
     </button>
   </div>
 
-  <!-- User Info -->
-  <div class="user-info" *ngIf="currentUser">
-    <div class="user-avatar">
-      {{ currentUser.username.charAt(0).toUpperCase() }}
-    </div>
-    <div class="user-details" *ngIf="!isCollapsed">
-      <div class="username">{{ currentUser.username }}</div>
-      <div class="user-region">
-        <span class="region-flag">{{ getRegionFlag(currentUser.region) }}</span>
-        {{ currentUser.region }}
+  <!-- Dashboard Sections Container -->
+  <div class="dashboard-sections">
+    
+    <!-- TPR Dashboard Section (Top Half) -->
+    <div class="dashboard-section tpr-section">
+        <div class="dashboard-header" *ngIf="!isCollapsed">
+        <h4>TPR</h4>
       </div>
-    </div>
-  </div>
-
-  <!-- Environment Selection -->
-  <div class="environment-section">
-    <div class="section-header" *ngIf="!isCollapsed">
-      <h4>Environment</h4>
-    </div>
-
-    <!-- Loading State -->
-    <div class="loading-state" *ngIf="isLoading">
-      <div class="spinner"></div>
-      <span *ngIf="!isCollapsed">Loading environments...</span>
-    </div>
-
-    <!-- Error State -->
-    <div class="error-state" *ngIf="error && !isLoading">
-      <div class="error-icon">⚠️</div>
-      <span *ngIf="!isCollapsed">{{ error }}</span>
-      <button class="retry-btn" (click)="loadUserEnvironments()" *ngIf="!isCollapsed">
-        Retry
-      </button>
-    </div>
-
-    <!-- Environment List -->
-    <div class="environment-list" *ngIf="userEnvironments && !isLoading && !error">
-      <div 
-        class="environment-item"
-        *ngFor="let envKey of userEnvironments.available_keys"
-        [class.selected]="selectedEnvironment === envKey"
-        (click)="selectEnvironment(envKey)"
-      >
-        <div class="env-icon">{{ getEnvironmentIcon(envKey) }}</div>
-        <div class="env-info" *ngIf="!isCollapsed">
-          <div class="env-name">{{ getEnvironmentDisplayName(envKey) }}</div>
-          <div class="env-key">{{ envKey }}</div>
+      
+      <!-- TPR Environment Selection -->
+      <div class="environment-section">
+        <div class="section-header" *ngIf="!isCollapsed">
+          <h5>Environment</h5>
         </div>
-        <div class="env-status" *ngIf="selectedEnvironment === envKey">
-          <span class="active-indicator">●</span>
+
+        <!-- Loading State -->
+        <div class="loading-state" *ngIf="isLoading">
+          <div class="spinner"></div>
+          <span *ngIf="!isCollapsed">Loading environments...</span>
+        </div>
+
+        <!-- Error State -->
+        <div class="error-state" *ngIf="error && !isLoading">
+          <div class="error-icon">⚠️</div>
+          <span *ngIf="!isCollapsed">{{ error }}</span>
+          <button class="retry-btn" (click)="loadUserEnvironments()" *ngIf="!isCollapsed">
+            Retry
+          </button>
+        </div>
+
+        <!-- TPR Environment List -->
+        <div class="environment-list" *ngIf="userEnvironments && !isLoading && !error">
+          <div 
+            class="environment-item"
+            *ngFor="let envKey of userEnvironments.available_keys"
+            [class.selected]="selectedTprEnvironment === envKey"
+            (click)="selectTprEnvironment(envKey)"
+          >
+            <div class="env-info" *ngIf="!isCollapsed">
+              <div class="env-name">{{ getEnvironmentDisplayName(envKey) }}</div>
+              <div class="env-key">{{ envKey }}</div>
+            </div>
+            <div class="env-status" *ngIf="selectedTprEnvironment === envKey">
+              <span class="active-indicator"></span>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
 
-  <!-- Selected Environment Details -->
-  <div class="selected-env-details" *ngIf="selectedEnvironment && userEnvironments && !isCollapsed">
-    <div class="section-header">
-      <h4>Current Environment</h4>
     </div>
-    <div class="env-details-card">
-      <div class="env-title">
-        {{ getEnvironmentIcon(selectedEnvironment) }}
-        {{ getEnvironmentDisplayName(selectedEnvironment) }}
+
+    <!-- Separator -->
+    <div class="dashboard-separator" *ngIf="!isCollapsed"></div>
+
+    <!-- Formulary Dashboard Section (Bottom Half) -->
+    <div class="dashboard-section formulary-section">
+        <div class="dashboard-header" *ngIf="!isCollapsed">
+        <h4>Formulary</h4>
       </div>
-      <div class="env-config">
-        <div class="config-item">
-          <span class="config-label">Topic Prefix:</span>
-          <span class="config-value">{{ userEnvironments.environments[selectedEnvironment].ENV_PREFIX_KAFKA_TOPIC }}</span>
+      
+      <!-- Formulary Environment Selection -->
+      <div class="environment-section">
+        <div class="section-header" *ngIf="!isCollapsed">
+          <h5>Environment</h5>
+        </div>
+
+        <!-- Formulary Environment List -->
+        <div class="environment-list" *ngIf="userEnvironments && !isLoading && !error">
+          <div 
+            class="environment-item"
+            *ngFor="let envKey of userEnvironments.available_keys"
+            [class.selected]="selectedFormularyEnvironment === envKey"
+            (click)="selectFormularyEnvironment(envKey)"
+          >
+            <div class="env-info" *ngIf="!isCollapsed">
+              <div class="env-name">{{ getEnvironmentDisplayName(envKey) }}</div>
+              <div class="env-key">{{ envKey }}</div>
+            </div>
+            <div class="env-status" *ngIf="selectedFormularyEnvironment === envKey">
+              <span class="active-indicator"></span>
+            </div>
+          </div>
         </div>
       </div>
+
     </div>
   </div>
 
-  <!-- Navigation Menu -->
-  <div class="nav-menu">
-    <div class="section-header" *ngIf="!isCollapsed">
-      <h4>Navigation</h4>
-    </div>
-    <div class="nav-item" routerLink="/dashboard" routerLinkActive="active">
-      <div class="nav-icon">🏠</div>
-      <span *ngIf="!isCollapsed">Dashboard</span>
-    </div>
-    <div class="nav-item" routerLink="/processors" routerLinkActive="active">
-      <div class="nav-icon">⚙️</div>
-      <span *ngIf="!isCollapsed">Processors</span>
-    </div>
-  </div>
-
-  <!-- Logout Button -->
-  <div class="sidebar-footer">
-    <button class="logout-btn" (click)="logout()">
-      <div class="logout-icon">🚪</div>
-      <span *ngIf="!isCollapsed">Logout</span>
-    </button>
-  </div>
 </div>
+

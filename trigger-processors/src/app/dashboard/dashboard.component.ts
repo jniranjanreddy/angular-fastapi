@@ -38,4 +38,9 @@ export class DashboardComponent implements OnInit {
       this.selectedEnvironment = env;
     });
   }
+
+  logout(): void {
+    this.authService.logout();
+    this.router.navigate(['/login']);
+  }
 }

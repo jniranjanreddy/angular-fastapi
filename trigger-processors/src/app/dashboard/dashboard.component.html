@@ -3,16 +3,20 @@
   
   <div class="main-content">
     <div class="content-header">
-      <h1>Trigger Processor Dashboard</h1>
-      <div class="header-info" *ngIf="currentUser && selectedEnvironment">
-        <div class="user-badge">
-          <span class="user-icon">👤</span>
-          {{ currentUser.username }}
+      <div class="header-right" *ngIf="currentUser">
+        <div class="header-info">
+          <div class="user-badge">
+            <span class="user-label">User:</span>
+            <span class="user-name">{{ currentUser.username }}</span>
+          </div>
+          <div class="env-badge" *ngIf="selectedEnvironment">
+            <span class="env-label">Environment:</span>
+            <span class="env-name">{{ selectedEnvironment.toUpperCase() }}</span>
+          </div>
         </div>
-        <div class="env-badge">
-          <span class="env-icon">🌐</span>
-          {{ selectedEnvironment.toUpperCase() }}
-        </div>
+        <button class="logout-button" (click)="logout()">
+          Logout
+        </button>
       </div>
     </div>
 

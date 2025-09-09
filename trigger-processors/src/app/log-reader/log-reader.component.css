@@ -1,16 +1,20 @@
 .log-reader-container {
   width: 100%;
-  padding: 30px;
+  padding: 15px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-  min-height: 100vh;
+  height: 100%;
+  max-height: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 .main-layout {
   display: flex;
   justify-content: center;
-  align-items: flex-start;
-  min-height: calc(100vh - 120px);
+  align-items: stretch;
+  height: calc(100% - 60px); /* Account for header */
+  overflow: hidden;
 }
 
 .main-panel {
@@ -18,13 +22,15 @@
   max-width: 800px;
   display: flex;
   flex-direction: column;
+  height: 100%;
+  min-height: 0; /* Important for flex child */
 }
 
 .log-reader-container h2 {
   color: #2c3e50;
   text-align: center;
-  margin-bottom: 40px;
-  font-size: 2.5rem;
+  margin-bottom: 10px;
+  font-size: 1.5rem;
   font-weight: 700;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
   letter-spacing: 1px;
@@ -34,18 +40,18 @@
 .tab-navigation {
   display: flex;
   border-bottom: 2px solid #e0e0e0;
-  margin-bottom: 30px;
   background: #f8f9fa;
   border-radius: 8px 8px 0 0;
+  flex-shrink: 0; /* Don't shrink */
 }
 
 .tab-button {
   flex: 1;
-  padding: 18px 24px;
+  padding: 12px 18px;
   border: none;
   background: transparent;
   cursor: pointer;
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 600;
   color: #666;
   transition: all 0.3s ease;
@@ -69,28 +75,36 @@
   background: white;
   border: 1px solid #e0e0e0;
   border-radius: 0 0 12px 12px;
-  padding: 40px;
+  padding: 15px;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  flex: 1;
+  min-height: 0; /* Important for flex child */
+  display: flex;
+  flex-direction: column;
 }
 
 .search-section h3 {
   color: #2c3e50;
-  margin-bottom: 30px;
-  font-size: 1.8rem;
+  margin-bottom: 15px;
+  font-size: 1.4rem;
   font-weight: 700;
   letter-spacing: 0.5px;
+  flex-shrink: 0; /* Don't shrink */
 }
 
 .search-form {
   display: flex;
   flex-direction: column;
-  gap: 25px;
+  gap: 15px;
+  flex: 1;
+  min-height: 0; /* Important for flex child */
 }
 
 .input-group {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
+  flex-shrink: 0; /* Don't shrink */
 }
 
 .input-group label {
@@ -142,6 +156,7 @@
   min-width: 140px;
   letter-spacing: 0.5px;
   text-transform: uppercase;
+  flex-shrink: 0; /* Don't shrink */
 }
 
 .submit-button:hover {

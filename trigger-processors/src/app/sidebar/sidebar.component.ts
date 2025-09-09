@@ -12,7 +12,9 @@ import { AuthService, UserEnvironmentsResponse } from '../services/auth.service'
 })
 export class SidebarComponent implements OnInit {
   userEnvironments: UserEnvironmentsResponse | null = null;
-  selectedEnvironment: string | null = null;
+  selectedTprEnvironment: string | null = null;
+  selectedFormularyEnvironment: string | null = null;
+  activeDashboard: 'tpr' | 'formulary' = 'tpr';
   isLoading = false;
   error = '';
   currentUser: any = null;
@@ -29,9 +31,11 @@ export class SidebarComponent implements OnInit {
       this.currentUser = user;
     });
 
-    // Subscribe to selected environment
+    // Subscribe to selected environment (for backward compatibility)
     this.authService.selectedEnvironment$.subscribe(env => {
-      this.selectedEnvironment = env;
+      if (env && !this.selectedTprEnvironment) {
+        this.selectedTprEnvironment = env;
+      }
     });
 
     // Load user environments
@@ -48,8 +52,11 @@ export class SidebarComponent implements OnInit {
         this.isLoading = false;
         
         // Auto-select first environment if none selected
-        if (!this.selectedEnvironment && response.available_keys.length > 0) {
-          this.selectEnvironment(response.available_keys[0]);
+        if (!this.selectedTprEnvironment && response.available_keys.length > 0) {
+          this.selectTprEnvironment(response.available_keys[0]);
+        }
+        if (!this.selectedFormularyEnvironment && response.available_keys.length > 0) {
+          this.selectFormularyEnvironment(response.available_keys[0]);
         }
       },
       error: (error) => {
@@ -60,15 +67,21 @@ export class SidebarComponent implements OnInit {
     });
   }
 
-  selectEnvironment(envKey: string): void {
-    this.authService.setSelectedEnvironment(envKey);
-    this.selectedEnvironment = envKey;
+  selectTprEnvironment(envKey: string): void {
+    this.selectedTprEnvironment = envKey;
+    this.authService.setSelectedEnvironment(envKey); // For backward compatibility
+    this.activeDashboard = 'tpr';
   }
 
-  logout(): void {
-    this.authService.logout();
-    this.router.navigate(['/login']);
+  selectFormularyEnvironment(envKey: string): void {
+    this.selectedFormularyEnvironment = envKey;
+    this.activeDashboard = 'formulary';
   }
+
+  setActiveDashboard(dashboard: 'tpr' | 'formulary'): void {
+    this.activeDashboard = dashboard;
+  }
+
 
   toggleSidebar(): void {
     this.isCollapsed = !this.isCollapsed;
