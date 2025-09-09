@@ -1,4 +1,11 @@
 {
+  
+  "local": {
+    "DB_CONN": "mongodb://devops:password@192.168.232.163:27018",
+    "NR_KAFKA_HOST_URL": "",
+    "PATIENT_PREPROCESSOR_KAFKA_TOPIC": "",
+    "ENV_PREFIX_KAFKA_TOPIC": "local"
+  },  
   "dev": {
     "DB_CONN": "mongodb://devops:password@192.168.232.163:27018",
     "NR_KAFKA_HOST_URL": "",
@@ -10,5 +17,30 @@
     "NR_KAFKA_HOST_URL": "",
     "PATIENT_PREPROCESSOR_KAFKA_TOPIC": "",
     "ENV_PREFIX_KAFKA_TOPIC": "qa"
+  },
+  "qaperf": {
+    "DB_CONN": "mongodb://devops:password@192.168.232.163:27018",
+    "NR_KAFKA_HOST_URL": "",
+    "PATIENT_PREPROCESSOR_KAFKA_TOPIC": "",
+    "ENV_PREFIX_KAFKA_TOPIC": "qaperf"
+  },
+  "stage": {
+    "DB_CONN": "mongodb://devops:password@192.168.232.163:27018",
+    "NR_KAFKA_HOST_URL": "",
+    "PATIENT_PREPROCESSOR_KAFKA_TOPIC": "",
+    "ENV_PREFIX_KAFKA_TOPIC": "stage"
+  },
+  "sup": {
+    "DB_CONN": "mongodb://devops:password@192.168.232.163:27018",
+    "NR_KAFKA_HOST_URL": "",
+    "PATIENT_PREPROCESSOR_KAFKA_TOPIC": "",
+    "ENV_PREFIX_KAFKA_TOPIC": "sup"
+  },
+  "prod": {
+    "DB_CONN": "mongodb://devops:password@192.168.232.163:27018",
+    "NR_KAFKA_HOST_URL": "",
+    "PATIENT_PREPROCESSOR_KAFKA_TOPIC": "",
+    "ENV_PREFIX_KAFKA_TOPIC": "prod"
   }
+
 }

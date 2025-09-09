@@ -1,0 +1,76 @@
+<div class="login-container">
+  <div class="login-card">
+    <div class="login-header">
+      <h1>TPR Login</h1>
+      <p>Sign in to access the Trigger Processor</p>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+      <!-- Username Field -->
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input
+          type="text"
+          id="username"
+          formControlName="username"
+          [class.error]="isFieldInvalid('username')"
+          placeholder="Enter your username"
+          class="form-input"
+        />
+        <div class="error-message" *ngIf="isFieldInvalid('username')">
+          {{ getFieldError('username') }}
+        </div>
+      </div>
+
+      <!-- Password Field -->
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          type="password"
+          id="password"
+          formControlName="password"
+          [class.error]="isFieldInvalid('password')"
+          placeholder="Enter your password"
+          class="form-input"
+        />
+        <div class="error-message" *ngIf="isFieldInvalid('password')">
+          {{ getFieldError('password') }}
+        </div>
+      </div>
+
+      <!-- Error Message -->
+      <div class="alert error-alert" *ngIf="errorMessage">
+        <i class="error-icon">⚠</i>
+        {{ errorMessage }}
+      </div>
+
+      <!-- Success Message -->
+      <div class="alert success-alert" *ngIf="successMessage">
+        <i class="success-icon">✓</i>
+        {{ successMessage }}
+      </div>
+
+      <!-- Submit Button -->
+      <button
+        type="submit"
+        class="login-button"
+        [disabled]="isLoading"
+        [class.loading]="isLoading"
+      >
+        <span *ngIf="!isLoading">Sign In</span>
+        <span *ngIf="isLoading" class="loading-text">
+          <i class="loading-spinner"></i>
+          Signing In...
+        </span>
+      </button>
+    </form>
+
+    <div class="login-footer">
+      <p class="demo-credentials">
+        <strong>Demo Credentials:</strong><br>
+        <span class="credential-item">Username: niranjan | Password: niranjan&#64;12345 (US Region)</span><br>
+        <span class="credential-item">Username: susheel | Password: susheel&#64;12345 (IND Region)</span>
+      </p>
+    </div>
+  </div>
+</div>

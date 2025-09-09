@@ -10,13 +10,13 @@
           class="tab-button" 
           [class.active]="activeTab === 'l1'"
           (click)="setActiveTab('l1')">
-          L1 Processor
+          Trigger-L1
         </button>
         <button 
           class="tab-button" 
           [class.active]="activeTab === 'l3'"
           (click)="setActiveTab('l3')">
-          L3 Processor
+          Trigger-L3
         </button>
         <button 
           class="tab-button" 
@@ -30,7 +30,7 @@
       <div class="tab-content">
     <!-- L1 Search Section -->
     <div class="search-section" *ngIf="activeTab === 'l1'">
-      <h3>L1 Processor</h3>
+      <h3>Trigger-L1</h3>
       <div class="search-form">
         <div class="input-group">
           <label for="l1-patient-id">Patient ID(s):</label>
@@ -75,7 +75,7 @@
 
     <!-- L3 Processor Section -->
     <div class="search-section" *ngIf="activeTab === 'l3'">
-      <h3>L3 Processor</h3>
+      <h3>Trigger-L3</h3>
       <div class="search-form">
         <div class="input-group">
           <label for="l3-patient-id">Patient ID(s):</label>
@@ -117,7 +117,7 @@
           
           <!-- L3 Logs Display -->
           <div class="logs-section" *ngIf="l3Response.logs && l3Response.logs.length > 0">
-            <h4>L3 Processing Logs for Patient {{ l3Response.result }}</h4>
+            <h4>Trigger-L3 Logs for Patient {{ l3Response.result }}</h4>
             <div class="log-content">
               <div 
                 class="log-line" 

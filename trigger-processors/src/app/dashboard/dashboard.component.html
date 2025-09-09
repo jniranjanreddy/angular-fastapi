@@ -1,0 +1,33 @@
+<div class="dashboard-container">
+  <app-sidebar></app-sidebar>
+  
+  <div class="main-content">
+    <div class="content-header">
+      <h1>Trigger Processor Dashboard</h1>
+      <div class="header-info" *ngIf="currentUser && selectedEnvironment">
+        <div class="user-badge">
+          <span class="user-icon">👤</span>
+          {{ currentUser.username }}
+        </div>
+        <div class="env-badge">
+          <span class="env-icon">🌐</span>
+          {{ selectedEnvironment.toUpperCase() }}
+        </div>
+      </div>
+    </div>
+
+    <div class="content-body">
+      <div class="welcome-section" *ngIf="!selectedEnvironment">
+        <div class="welcome-card">
+          <h2>Welcome to TPR!</h2>
+          <p>Please select an environment from the sidebar to begin.</p>
+          <div class="welcome-icon">⚙️</div>
+        </div>
+      </div>
+
+      <div class="processors-section" *ngIf="selectedEnvironment">
+        <app-log-reader></app-log-reader>
+      </div>
+    </div>
+  </div>
+</div>
