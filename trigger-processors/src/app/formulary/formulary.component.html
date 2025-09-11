@@ -1,0 +1,276 @@
+<div class="formulary-container">
+  <div class="main-layout">
+    <div class="main-panel">
+      
+      <!-- Header -->
+      <h2>Formulary Management</h2>
+      
+      <!-- Tab Navigation -->
+      <div class="tab-navigation">
+        <button 
+          class="tab-button" 
+          [class.active]="activeTab === 'coverage'"
+          (click)="setActiveTab('coverage')">
+          Coverage Check
+        </button>
+        <button 
+          class="tab-button" 
+          [class.active]="activeTab === 'search'"
+          (click)="setActiveTab('search')">
+          Drug Search
+        </button>
+        <button 
+          class="tab-button" 
+          [class.active]="activeTab === 'popular'"
+          (click)="setActiveTab('popular')">
+          Popular Drugs
+        </button>
+      </div>
+
+      <!-- Tab Content -->
+      <div class="tab-content">
+        
+        <!-- Coverage Check Tab -->
+        <div *ngIf="activeTab === 'coverage'" class="search-section">
+          <h3>Drug Coverage Check</h3>
+          
+          <form class="search-form" (ngSubmit)="checkCoverage()">
+            <div class="input-group">
+              <label for="patient-id">Patient ID *</label>
+              <input 
+                type="text" 
+                id="patient-id"
+                class="search-input"
+                [(ngModel)]="coverageForm.patient_id"
+                name="patient_id"
+                placeholder="Enter patient ID (e.g., 12345)"
+                required>
+              <small class="input-help">Required: Enter the patient's unique identifier</small>
+            </div>
+
+            <div class="input-group">
+              <label for="drug-name">Drug Name (Optional)</label>
+              <input 
+                type="text" 
+                id="drug-name"
+                class="search-input"
+                [(ngModel)]="coverageForm.drug_name"
+                name="drug_name"
+                placeholder="Enter drug name (e.g., Metformin)">
+              <small class="input-help">Optional: Specific drug to check coverage for</small>
+            </div>
+
+            <div class="input-group">
+              <label for="ndc-code">NDC Code (Optional)</label>
+              <input 
+                type="text" 
+                id="ndc-code"
+                class="search-input"
+                [(ngModel)]="coverageForm.ndc_code"
+                name="ndc_code"
+                placeholder="Enter NDC code (e.g., 0093-1074-01)">
+              <small class="input-help">Optional: National Drug Code for specific formulation</small>
+            </div>
+
+            <div class="form-actions">
+              <button 
+                type="submit" 
+                class="submit-button"
+                [disabled]="isLoadingCoverage || !selectedEnvironment">
+                <span *ngIf="isLoadingCoverage">Checking...</span>
+                <span *ngIf="!isLoadingCoverage">Check Coverage</span>
+              </button>
+              <button 
+                type="button" 
+                class="reset-button"
+                (click)="resetCoverageForm()">
+                Reset
+              </button>
+            </div>
+          </form>
+
+          <!-- Error Message -->
+          <div *ngIf="coverageError" class="error-message">
+            <strong>Error:</strong> {{ coverageError }}
+          </div>
+
+          <!-- Coverage Results -->
+          <div *ngIf="coverageResult" class="results-section">
+            <h4>Coverage Results for Patient {{ coverageResult.patient_id }}</h4>
+            
+            <div class="result-card" [ngClass]="'status-' + coverageResult.status">
+              <div class="result-header">
+                <span class="status-badge" [ngClass]="'badge-' + coverageResult.status">
+                  {{ coverageResult.status.toUpperCase() }}
+                </span>
+                <span class="timestamp">{{ coverageResult.timestamp | date:'short' }}</span>
+              </div>
+              
+              <p class="result-message">{{ coverageResult.message }}</p>
+              
+              <!-- Specific Drug Info -->
+              <div *ngIf="coverageResult.drug_info" class="drug-details">
+                <h5>Drug Information</h5>
+                <div class="drug-card">
+                  <div class="drug-header">
+                    <strong>{{ coverageResult.drug_info.drug_name }}</strong>
+                    <span class="tier-badge" [style.background-color]="getTierColor(coverageResult.drug_info.tier)">
+                      {{ coverageResult.drug_info.tier }}
+                    </span>
+                  </div>
+                  <div class="drug-details-grid">
+                    <div><strong>NDC Code:</strong> {{ coverageResult.drug_info.ndc_code }}</div>
+                    <div><strong>Copay:</strong> {{ coverageResult.drug_info.copay }}</div>
+                    <div><strong>Coverage:</strong> 
+                      <span [style.color]="getStatusColor(coverageResult.drug_info.coverage_status)">
+                        {{ coverageResult.drug_info.coverage_status }}
+                      </span>
+                    </div>
+                    <div><strong>Prior Auth:</strong> 
+                      <span [class]="coverageResult.drug_info.prior_auth_required ? 'text-warning' : 'text-success'">
+                        {{ coverageResult.drug_info.prior_auth_required ? 'Required' : 'Not Required' }}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- All Formulary Drugs -->
+              <div *ngIf="coverageResult.coverage_details?.formulary_drugs" class="formulary-summary">
+                <h5>Patient's Formulary Drugs ({{ coverageResult.coverage_details.total_drugs }} total)</h5>
+                <div class="drugs-grid">
+                  <div *ngFor="let drug of coverageResult.coverage_details.formulary_drugs" class="mini-drug-card">
+                    <div class="mini-drug-header">
+                      <strong>{{ drug.drug_name }}</strong>
+                      <span class="mini-tier-badge" [style.background-color]="getTierColor(drug.tier)">
+                        {{ drug.tier }}
+                      </span>
+                    </div>
+                    <div class="mini-drug-info">
+                      <span>{{ drug.copay }}</span>
+                      <span [style.color]="getStatusColor(drug.coverage_status)">{{ drug.coverage_status }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Search Tab -->
+        <div *ngIf="activeTab === 'search'" class="search-section">
+          <h3>Formulary Search</h3>
+          
+          <form class="search-form" (ngSubmit)="searchFormulary()">
+            <div class="input-group">
+              <label for="search-type">Search Type</label>
+              <select 
+                id="search-type"
+                class="search-input"
+                [(ngModel)]="searchForm.search_type"
+                name="search_type">
+                <option value="drug_name">Drug Name</option>
+                <option value="ndc_code">NDC Code</option>
+                <option value="patient_id">Patient ID</option>
+              </select>
+            </div>
+
+            <div class="input-group">
+              <label for="search-term">Search Term *</label>
+              <input 
+                type="text" 
+                id="search-term"
+                class="search-input"
+                [(ngModel)]="searchForm.search_term"
+                name="search_term"
+                placeholder="Enter search term"
+                required>
+              <small class="input-help">Search across formulary database</small>
+            </div>
+
+            <div class="form-actions">
+              <button 
+                type="submit" 
+                class="submit-button"
+                [disabled]="isLoadingSearch || !selectedEnvironment">
+                <span *ngIf="isLoadingSearch">Searching...</span>
+                <span *ngIf="!isLoadingSearch">Search</span>
+              </button>
+              <button 
+                type="button" 
+                class="reset-button"
+                (click)="resetSearchForm()">
+                Reset
+              </button>
+            </div>
+          </form>
+
+          <!-- Search Error -->
+          <div *ngIf="searchError" class="error-message">
+            <strong>Error:</strong> {{ searchError }}
+          </div>
+
+          <!-- Search Results -->
+          <div *ngIf="searchResults.length > 0" class="results-section">
+            <h4>Search Results ({{ searchResults.length }} found)</h4>
+            
+            <div class="search-results-grid">
+              <div *ngFor="let result of searchResults" class="search-result-card">
+                <div class="result-patient">
+                  <strong>Patient:</strong> {{ result.patient_id }}
+                  <span class="match-type">Match: {{ result.match_type }}</span>
+                </div>
+                <div class="result-drug">
+                  <div class="drug-name">{{ result.drug_info.drug_name }}</div>
+                  <div class="drug-meta">
+                    <span class="ndc">{{ result.drug_info.ndc_code }}</span>
+                    <span class="tier-badge" [style.background-color]="getTierColor(result.drug_info.tier)">
+                      {{ result.drug_info.tier }}
+                    </span>
+                  </div>
+                  <div class="drug-status">
+                    <span class="copay">{{ result.drug_info.copay }}</span>
+                    <span [style.color]="getStatusColor(result.drug_info.coverage_status)">
+                      {{ result.drug_info.coverage_status }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="!isLoadingSearch && searchResults.length === 0 && searchForm.search_term" class="no-results">
+            No results found for "{{ searchForm.search_term }}"
+          </div>
+        </div>
+
+        <!-- Popular Drugs Tab -->
+        <div *ngIf="activeTab === 'popular'" class="search-section">
+          <h3>Popular Formulary Drugs</h3>
+          
+          <div *ngIf="isLoadingPopular" class="loading-message">
+            Loading popular drugs...
+          </div>
+
+          <div *ngIf="!isLoadingPopular && popularDrugs.length > 0" class="popular-drugs-grid">
+            <div *ngFor="let drug of popularDrugs" class="popular-drug-card">
+              <div class="drug-header">
+                <h4>{{ drug.name }}</h4>
+                <span class="tier-badge" [style.background-color]="getTierColor(drug.tier)">
+                  {{ drug.tier }}
+                </span>
+              </div>
+              <div class="drug-category">
+                <strong>Category:</strong> {{ drug.category }}
+              </div>
+              <div class="drug-description">
+                Commonly prescribed medication in the {{ drug.category.toLowerCase() }} category.
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

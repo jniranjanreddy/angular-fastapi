@@ -50,6 +50,7 @@
   display: flex;
   gap: 15px;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .user-badge,
@@ -75,6 +76,49 @@
 .env-name {
   color: #2c3e50;
   font-weight: 600;
+}
+
+/* Timezone badges */
+.timezone-badges {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.timezone-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  background: rgba(46, 204, 113, 0.1);
+  border: 1px solid rgba(46, 204, 113, 0.2);
+  min-width: 80px;
+}
+
+.timezone-badge:last-child {
+  background: rgba(255, 152, 0, 0.1);
+  border: 1px solid rgba(255, 152, 0, 0.2);
+}
+
+.timezone-badge:last-child .tz-label {
+  color: #ff9800;
+}
+
+.tz-label {
+  color: #27ae60;
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+
+.tz-time {
+  color: #2c3e50;
+  font-weight: 600;
+  font-family: 'Courier New', monospace;
+  font-size: 0.8rem;
 }
 
 .logout-button {
@@ -207,6 +251,21 @@
     font-size: 0.85rem;
   }
   
+  .timezone-badges {
+    gap: 8px;
+  }
+  
+  .timezone-badge {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+    min-width: 70px;
+  }
+  
+  .tz-label,
+  .tz-time {
+    font-size: 0.75rem;
+  }
+  
   .logout-button {
     padding: 8px 16px;
     font-size: 0.85rem;
@@ -240,6 +299,23 @@
   .header-info {
     width: 100%;
     justify-content: space-between;
+    gap: 10px;
+  }
+  
+  .timezone-badges {
+    gap: 6px;
+    justify-content: center;
+  }
+  
+  .timezone-badge {
+    padding: 5px 8px;
+    font-size: 0.75rem;
+    min-width: 60px;
+  }
+  
+  .tz-label,
+  .tz-time {
+    font-size: 0.7rem;
   }
   
   .logout-button {
@@ -269,6 +345,23 @@
   .env-badge {
     padding: 6px 12px;
     font-size: 0.8rem;
+  }
+  
+  .timezone-badges {
+    gap: 4px;
+    justify-content: center;
+    width: 100%;
+  }
+  
+  .timezone-badge {
+    padding: 4px 6px;
+    font-size: 0.7rem;
+    min-width: 55px;
+  }
+  
+  .tz-label,
+  .tz-time {
+    font-size: 0.65rem;
   }
   
   .content-body {

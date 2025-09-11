@@ -9,9 +9,15 @@
             <span class="user-label">User:</span>
             <span class="user-name">{{ currentUser.username }}</span>
           </div>
-          <div class="env-badge" *ngIf="selectedEnvironment">
+          <div class="env-badge" *ngIf="getCurrentEnvironment()">
             <span class="env-label">Environment:</span>
-            <span class="env-name">{{ selectedEnvironment.toUpperCase() }}</span>
+            <span class="env-name">{{ getCurrentEnvironment()?.toUpperCase() }}</span>
+          </div>
+          <div class="timezone-badges">
+            <div class="timezone-badge" *ngFor="let tz of timezones">
+              <span class="tz-label">{{ tz.name }}:</span>
+              <span class="tz-time">{{ tz.time }}</span>
+            </div>
           </div>
         </div>
         <button class="logout-button" (click)="logout()">
@@ -21,16 +27,17 @@
     </div>
 
     <div class="content-body">
-      <div class="welcome-section" *ngIf="!selectedEnvironment">
+      <div class="welcome-section" *ngIf="!getCurrentEnvironment()">
         <div class="welcome-card">
-          <h2>Welcome to TPR!</h2>
+          <h2>Welcome to the Dashboard!</h2>
           <p>Please select an environment from the sidebar to begin.</p>
           <div class="welcome-icon">⚙️</div>
         </div>
       </div>
 
-      <div class="processors-section" *ngIf="selectedEnvironment">
-        <app-log-reader></app-log-reader>
+      <div class="processors-section" *ngIf="getCurrentEnvironment()">
+        <app-log-reader *ngIf="activeDashboard === 'tpr'"></app-log-reader>
+        <app-formulary *ngIf="activeDashboard === 'formulary'"></app-formulary>
       </div>
     </div>
   </div>

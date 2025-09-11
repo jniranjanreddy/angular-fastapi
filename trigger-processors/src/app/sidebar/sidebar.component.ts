@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService, UserEnvironmentsResponse } from '../services/auth.service';
+import { DashboardService, DashboardType } from '../services/dashboard.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -22,7 +23,8 @@ export class SidebarComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private dashboardService: DashboardService
   ) {}
 
   ngOnInit(): void {
@@ -70,16 +72,19 @@ export class SidebarComponent implements OnInit {
   selectTprEnvironment(envKey: string): void {
     this.selectedTprEnvironment = envKey;
     this.authService.setSelectedEnvironment(envKey); // For backward compatibility
-    this.activeDashboard = 'tpr';
+    this.dashboardService.setTprEnvironment(envKey);
+    this.setActiveDashboard('tpr');
   }
 
   selectFormularyEnvironment(envKey: string): void {
     this.selectedFormularyEnvironment = envKey;
-    this.activeDashboard = 'formulary';
+    this.dashboardService.setFormularyEnvironment(envKey);
+    this.setActiveDashboard('formulary');
   }
 
-  setActiveDashboard(dashboard: 'tpr' | 'formulary'): void {
+  setActiveDashboard(dashboard: DashboardType): void {
     this.activeDashboard = dashboard;
+    this.dashboardService.setActiveDashboard(dashboard);
   }
 
 

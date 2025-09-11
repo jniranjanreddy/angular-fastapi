@@ -14,6 +14,7 @@ from routers.level_3 import level3
 from routers.cleanup import cleanup
 from routers.appointments_search import router as appointments_router
 from routers.auth import router as auth_router
+from routers.formulary import router as formulary_router
 
 
 app = FastAPI()
@@ -31,6 +32,7 @@ app.include_router(level1, tags=["level0"], prefix="/level1")
 app.include_router(level3, tags=["level1"], prefix="/level3")
 app.include_router(cleanup, tags=["cleanup"], prefix="/cleanup")
 app.include_router(appointments_router, tags=["appointments"], prefix="/api")
+app.include_router(formulary_router, tags=["formulary"], prefix="/api")
 
 
 

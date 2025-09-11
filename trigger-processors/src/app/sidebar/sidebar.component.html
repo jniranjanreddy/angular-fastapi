@@ -12,7 +12,9 @@
     
     <!-- TPR Dashboard Section (Top Half) -->
     <div class="dashboard-section tpr-section">
-        <div class="dashboard-header" *ngIf="!isCollapsed">
+        <div class="dashboard-header" *ngIf="!isCollapsed" 
+             [class.active]="activeDashboard === 'tpr'"
+             (click)="setActiveDashboard('tpr')">
         <h4>TPR</h4>
       </div>
       
@@ -49,7 +51,7 @@
               <div class="env-name">{{ getEnvironmentDisplayName(envKey) }}</div>
               <div class="env-key">{{ envKey }}</div>
             </div>
-            <div class="env-status" *ngIf="selectedTprEnvironment === envKey">
+            <div class="env-status" *ngIf="selectedTprEnvironment === envKey && activeDashboard === 'tpr'">
               <span class="active-indicator"></span>
             </div>
           </div>
@@ -63,7 +65,9 @@
 
     <!-- Formulary Dashboard Section (Bottom Half) -->
     <div class="dashboard-section formulary-section">
-        <div class="dashboard-header" *ngIf="!isCollapsed">
+        <div class="dashboard-header" *ngIf="!isCollapsed" 
+             [class.active]="activeDashboard === 'formulary'"
+             (click)="setActiveDashboard('formulary')">
         <h4>Formulary</h4>
       </div>
       
@@ -85,7 +89,7 @@
               <div class="env-name">{{ getEnvironmentDisplayName(envKey) }}</div>
               <div class="env-key">{{ envKey }}</div>
             </div>
-            <div class="env-status" *ngIf="selectedFormularyEnvironment === envKey">
+            <div class="env-status" *ngIf="selectedFormularyEnvironment === envKey && activeDashboard === 'formulary'">
               <span class="active-indicator"></span>
             </div>
           </div>
